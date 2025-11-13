@@ -137,7 +137,7 @@ export default function MindShift() {
           achievements: [],
           scheduledInterventions: []
         };
-        await window.storage.set('mindshift_user', JSON.stringify(newUserData));
+       localStorage.setItem('mindshift_user', JSON.stringify(newUserData));
         setUserData(newUserData);
         setUser({ id: 'user_1', isPremium: false });
         setView('welcome');
