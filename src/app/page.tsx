@@ -1092,7 +1092,8 @@ function BreathingExercise({ step, onComplete, voiceEnabled }) {
   );
 }
 
-function DBTStopExercise({ step, onComplete }) {
+function DBTStopExercise({ step, onComplete, voiceEnabled }) {
+
   const [currentIndex, setCurrentIndex] = useState(-1);
   useEffect(() => {
     if (currentIndex === -1) return;
@@ -1134,7 +1135,8 @@ function DBTStopExercise({ step, onComplete }) {
   );
 }
 
-function QuestionExercise({ step, onComplete }) {
+function QuestionExercise({ step, onComplete, voiceEnabled }) {
+
   const [currentQ, setCurrentQ] = useState(0);
   const [started, setStarted] = useState(false);
 
@@ -1167,7 +1169,8 @@ function QuestionExercise({ step, onComplete }) {
   );
 }
 
-function InputExercise({ step, onComplete }) {
+function InputExercise({ step, onComplete, voiceEnabled }) {
+
   const [input, setInput] = useState('');
   const [started, setStarted] = useState(false);
 
@@ -1204,7 +1207,8 @@ function InputExercise({ step, onComplete }) {
   );
 }
 
-function CognitiveShuffleExercise({ step, onComplete }) {
+function CognitiveShuffleExercise({ step, onComplete, voiceEnabled }) {
+
   const [started, setStarted] = useState(false);
   const [currentWord, setCurrentWord] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
@@ -1243,7 +1247,8 @@ function CognitiveShuffleExercise({ step, onComplete }) {
   );
 }
 
-function ParadoxExercise({ step, onComplete }) {
+function ParadoxExercise({ step, onComplete, voiceEnabled }) {
+
   const [started, setStarted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(step.duration);
 
@@ -1278,7 +1283,8 @@ function ParadoxExercise({ step, onComplete }) {
   );
 }
 
-function PhysicalExercise({ step, onComplete }) {
+function PhysicalExercise({ step, onComplete, voiceEnabled }) {
+
   const [currentAction, setCurrentAction] = useState(0);
   const [started, setStarted] = useState(false);
 
@@ -1312,7 +1318,8 @@ function PhysicalExercise({ step, onComplete }) {
   );
 }
 
-function TimedExercise({ step, onComplete }) {
+function TimedExercise({ step, onComplete, voiceEnabled }) {
+
   const [started, setStarted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(step.duration);
 
@@ -1347,7 +1354,8 @@ function TimedExercise({ step, onComplete }) {
   );
 }
 
-function AffirmationExercise({ step, onComplete }) {
+function AffirmationExercise({ step, onComplete, voiceEnabled }) {
+
   const [currentAff, setCurrentAff] = useState(0);
   const [started, setStarted] = useState(false);
 
