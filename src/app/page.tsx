@@ -110,8 +110,16 @@ export default function MindShift() {
   }, []);
 
   const loadUserData = async () => {
-    try {
-      const result = await window.storage.get('mindshift_user');
+  try {
+    const data = localStorage.getItem('mindshift_user');
+    if (data) {
+      const parsed = JSON.parse(data);
+      setUserData(parsed);
+    }
+  } catch (error) {
+    console.error('Failed to load user data:', error);
+  }
+};
       if (result) {
         const data = JSON.parse(result.value);
         setUserData(data);
@@ -153,9 +161,13 @@ export default function MindShift() {
     setLoading(false);
   };
 
-  const saveUserData = async (data) => {
-    try {
-      await window.storage.set('mindshift_user', JSON.stringify(data));
+  const saveUserData = async (data: typeof userData) => {
+  try {
+    localStorage.setItem('mindshift_user', JSON.stringify(data));
+  } catch (error) {
+    console.error('Failed to save user data:', error);
+  }
+};;
       setUserData(data);
     } catch (error) {
       console.error('Storage error:', error);
