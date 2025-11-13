@@ -100,7 +100,7 @@ export default function MindShift() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [view, setView] = useState('welcome');
   const [sessionData, setSessionData] = useState({});
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isEmergencyMode, setIsEmergencyMode] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
