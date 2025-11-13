@@ -95,7 +95,7 @@ const PROTOCOLS = {
 };
 
 export default function MindShift() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<{ id: string; isPremium: boolean } | null>(null);
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [view, setView] = useState('welcome');
