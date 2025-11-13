@@ -173,7 +173,8 @@ export default function MindShift() {
     setView('home');
   };
 
-  const startProtocol = (emotionId, emergency = false) => {
+  const startProtocol = (emotionId: string, emergency = false) => {
+
     const protocol = emergency ? EMERGENCY_PROTOCOLS[emotionId] : PROTOCOLS[emotionId];
     
     if (!emergency && !user.isPremium) {
