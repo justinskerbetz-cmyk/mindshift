@@ -99,7 +99,7 @@ export default function MindShift() {
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [view, setView] = useState('welcome');
-  const [sessionData, setSessionData] = useState({});
+const [sessionData, setSessionData] = useState<any>({});
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isEmergencyMode, setIsEmergencyMode] = useState(false);
