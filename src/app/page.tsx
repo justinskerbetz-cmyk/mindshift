@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, useEffect } from 'react';
 import { Moon, Frown, Zap, Flame, Cloud, Circle, CheckCircle2, ArrowRight, TrendingUp, Lock, Sparkles, Award, Calendar, BarChart3, AlertCircle, Volume2, VolumeX, BookOpen, Share2, Target, Clock, Bell, Trophy, Gift } from 'lucide-react';
 
@@ -97,7 +98,7 @@ export default function MindShift() {
   const [user, setUser] = useState(null);
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [view, setView] = useState('welcome'); // welcome, home, protocol, feedback, stats, premium, crisis, learn, schedule, achievements
+  const [view, setView] = useState('welcome');
   const [sessionData, setSessionData] = useState({});
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -110,21 +111,13 @@ export default function MindShift() {
   }, []);
 
   const loadUserData = async () => {
-  try {
-    const data = localStorage.getItem('mindshift_user');
-    if (data) {
-      const parsed = JSON.parse(data);
-      setUserData(parsed);
-    }
-  } catch (error) {
-    console.error('Failed to load user data:', error);
-  }
-};
-      if (result) {
-        const data = JSON.parse(result.value);
-        setUserData(data);
-        setUser({ id: 'user_1', isPremium: data.isPremium || false });
-        setView(data.hasCompletedOnboarding ? 'home' : 'welcome');
+    try {
+      const data = localStorage.getItem('mindshift_user');
+      if (data) {
+        const parsed = JSON.parse(data);
+        setUserData(parsed);
+        setUser({ id: 'user_1', isPremium: parsed.isPremium || false });
+        setView(parsed.hasCompletedOnboarding ? 'home' : 'welcome');
       } else {
         const newUserData = {
           createdAt: new Date().toISOString(),
@@ -137,14 +130,14 @@ export default function MindShift() {
           achievements: [],
           scheduledInterventions: []
         };
-       localStorage.setItem('mindshift_user', JSON.stringify(newUserData));
+        localStorage.setItem('mindshift_user', JSON.stringify(newUserData));
         setUserData(newUserData);
         setUser({ id: 'user_1', isPremium: false });
         setView('welcome');
       }
     } catch (error) {
-      console.error('Storage error:', error);
-      setUserData({
+      console.error('Failed to load user data:', error);
+      const defaultUserData = {
         createdAt: new Date().toISOString(),
         isPremium: false,
         hasCompletedOnboarding: false,
@@ -154,7 +147,8 @@ export default function MindShift() {
         effectiveness: {},
         achievements: [],
         scheduledInterventions: []
-      });
+      };
+      setUserData(defaultUserData);
       setUser({ id: 'user_1', isPremium: false });
       setView('welcome');
     }
@@ -162,16 +156,11 @@ export default function MindShift() {
   };
 
   const saveUserData = async (data: typeof userData) => {
-  try {
-    localStorage.setItem('mindshift_user', JSON.stringify(data));
-  } catch (error) {
-    console.error('Failed to save user data:', error);
-  }
-};;
+    try {
+      localStorage.setItem('mindshift_user', JSON.stringify(data));
       setUserData(data);
     } catch (error) {
-      console.error('Storage error:', error);
-      setUserData(data);
+      console.error('Failed to save user data:', error);
     }
   };
 
@@ -286,7 +275,6 @@ export default function MindShift() {
       }
     };
 
-    // Check achievements
     const newAchievementsEarned = checkAchievements(newUserData);
     if (newAchievementsEarned.length > 0) {
       newUserData.achievements = [...(newUserData.achievements || []), ...newAchievementsEarned];
@@ -295,7 +283,6 @@ export default function MindShift() {
 
     await saveUserData(newUserData);
 
-    // Check if crisis support needed
     const recentUsage = newUserData.sessionHistory.slice(-15);
     const sameEmotionRecent = recentUsage.filter(s => s.emotion === selectedEmotion).length;
     const recentWorseRatings = recentUsage.filter(s => s.feeling === 'worse').length;
@@ -397,18 +384,15 @@ export default function MindShift() {
     );
   }
 
-  // Home Screen
   const today = new Date().toDateString();
   const lastUsed = userData.lastUsedDate;
   const usageToday = lastUsed === today ? userData.usageToday : 0;
   const remainingFree = user.isPremium ? '∞' : Math.max(0, 3 - usageToday);
 
-  // Predictive insights
   const prediction = getPredictiveInsight(userData);
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col">
-      {/* Header */}
       <div className="p-4 border-b border-gray-800">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-3">
@@ -448,7 +432,6 @@ export default function MindShift() {
         </div>
       </div>
 
-      {/* Stats Banner */}
       {userData.totalSessions > 0 && (
         <div className="p-3 bg-gray-800/50 border-b border-gray-800">
           <div className="max-w-2xl mx-auto flex gap-4 text-center">
@@ -472,7 +455,6 @@ export default function MindShift() {
         </div>
       )}
 
-      {/* Predictive Insight */}
       {prediction && user.isPremium && (
         <div className="p-3 bg-blue-900/20 border-b border-blue-800">
           <div className="max-w-2xl mx-auto flex items-start gap-3">
@@ -485,7 +467,6 @@ export default function MindShift() {
         </div>
       )}
 
-      {/* Emergency Quick Access */}
       <div className="p-3 bg-red-900/20 border-b border-red-800">
         <div className="max-w-2xl mx-auto">
           <p className="text-red-300 text-xs font-medium mb-2 flex items-center gap-2">
@@ -506,7 +487,6 @@ export default function MindShift() {
         </div>
       </div>
 
-      {/* Voice Toggle */}
       {user.isPremium && (
         <div className="p-3 bg-gray-800/30 border-b border-gray-800">
           <div className="max-w-2xl mx-auto flex items-center justify-between">
@@ -526,7 +506,6 @@ export default function MindShift() {
         </div>
       )}
 
-      {/* Emotion Buttons */}
       <div className="flex-1 overflow-auto p-4">
         <div className="max-w-2xl mx-auto space-y-3">
           {EMOTIONS.map((emotion) => {
@@ -576,7 +555,6 @@ export default function MindShift() {
         </div>
       </div>
 
-      {/* Footer */}
       <div className="p-3 text-center text-gray-500 text-xs border-t border-gray-800">
         <p>Based on DBT & CBT • Developed with licensed therapists</p>
       </div>
@@ -666,7 +644,6 @@ function OnboardingFlow({ onComplete }) {
     </div>
   );
 }
-
 function AchievementCelebration({ achievements, onContinue }) {
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-6">
@@ -956,9 +933,6 @@ function EnhancedFeedbackView({ emotion, onFeedback, userData, isEmergency }) {
   );
 }
 
-// Continue with remaining component implementations...
-// (ProtocolView, CrisisSupport, PremiumUpsell, StatsView, and exercise components remain the same as before)
-
 function ProtocolView({ emotion, stepIndex, onNext, onExit, isPremium, userData, isEmergency, voiceEnabled }) {
   const protocol = isEmergency ? EMERGENCY_PROTOCOLS[emotion] : PROTOCOLS[emotion];
   const currentStep = protocol.steps[stepIndex];
@@ -1056,8 +1030,6 @@ function EmergencyGroundingExercise({ step, onComplete, voiceEnabled }) {
   );
 }
 
-// Other exercise components remain the same...
-// (Keeping implementation concise - these are identical to previous version)
 function BreathingExercise({ step, onComplete, voiceEnabled }) {
   const [phase, setPhase] = useState('ready');
   const [count, setCount] = useState(0);
@@ -1161,7 +1133,6 @@ function DBTStopExercise({ step, onComplete }) {
   );
 }
 
-// Remaining exercise components (QuestionExercise, InputExercise, etc.) stay the same...
 function QuestionExercise({ step, onComplete }) {
   const [currentQ, setCurrentQ] = useState(0);
   const [started, setStarted] = useState(false);
@@ -1416,7 +1387,6 @@ function AffirmationExercise({ step, onComplete }) {
   );
 }
 
-// Crisis, Premium, and Stats views remain the same...
 function CrisisSupport({ onBack, emotion }) {
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
@@ -1599,7 +1569,6 @@ function StatsView({ userData, onBack, isPremium, onUpgrade }) {
           </div>
         </div>
 
-        {/* Achievements */}
         <div className="bg-gray-800 p-6 rounded-xl mb-6">
           <h3 className="text-white font-semibold mb-4">Achievements ({userData.achievements?.length || 0}/{ACHIEVEMENTS.length})</h3>
           <div className="grid grid-cols-2 gap-3">
@@ -1616,7 +1585,6 @@ function StatsView({ userData, onBack, isPremium, onUpgrade }) {
           </div>
         </div>
 
-        {/* Recent Sessions */}
         <div className="bg-gray-800 p-6 rounded-xl">
           <h3 className="text-white font-semibold mb-4">Recent Sessions</h3>
           <div className="space-y-2">
@@ -1650,7 +1618,6 @@ function StatsView({ userData, onBack, isPremium, onUpgrade }) {
   );
 }
 
-// Helper functions
 function calculateEffectiveness(userData) {
   const sessions = userData?.sessionHistory || [];
   if (sessions.length === 0) return 0;
@@ -1719,7 +1686,6 @@ function getPredictiveInsight(userData) {
   const currentHour = now.getHours();
   const currentDay = now.getDay();
   
-  // Find patterns
   const recentSessions = sessions.slice(-20);
   const sameTimeSlot = recentSessions.filter(s => {
     const hourDiff = Math.abs(s.hourOfDay - currentHour);
